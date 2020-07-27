@@ -1,6 +1,4 @@
-# How to create a post on this blog
-
-It's quite straightforward ! 
+Creating a post on this blog is quite straightforward ! 
 
 1. you first have to prepare your blog post in a [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) format 
 2. you upload your content to your static webfolder (probably where you have published this website like on Amazon S3)

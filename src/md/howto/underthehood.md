@@ -1,6 +1,4 @@
-# Under the hood
-
-The purpose of this paper is to describe the architecture of this blog and how I made it.
+What were the constraints about that blog and which architecture did I choose to use?
 
 But first, why this blog project? As I've been working on quite some various projects, i found out that I forget details and unfortunately spend too much time looking for answers again. I could of course used existing blog or CMS to achieve that need but I wanted to dig further and see how to implement one.
 

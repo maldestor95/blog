@@ -1,11 +1,11 @@
 [
     {
-    "date": "2020-07-27",
+    "date": "27-07-2020",
     "titre": "How to create a post on this blog",
     "link": "howto/howtopost.md"
     },
     {
-    "date": "2020-07-27",
+    "date": "27-07-2020",
     "titre": "under the hood of this blog",
     "link": "howto/underthehood.md"
     }
