@@ -38,30 +38,56 @@
     </v-app-bar>
 
     <v-main>
-      <blog-list @changeBlog="setActiveBlog($event)"/>
+      <!-- <list-blogs :bloglist="bloglist" v-model="activeBlog"/> -->
+      <v-container >
+      <v-row>
+        <v-col v-for="blog in bloglist" :key="blog.id">
+          <preview-article :blog="blog" v-model="activeBlog"></preview-article>
+        </v-col>
+      </v-row>
       <md-display :blog="activeBlog"/>
+      </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import mdDisplay from './components/mdDisplay'
-import blogList from './components/bloglist'
+// import listBlogs from './components/bloglist'
+import previewArticle from './components/previewArticle'
 
 export default {
   name: 'App',
 
   components: {
-    mdDisplay, blogList
+    mdDisplay, 
+    // listBlogs,
+     previewArticle
   },
 
   data: () => ({
-    activeBlog:"initial"
+    activeBlog:"initial",
+    bloglist:[]
   }),
+  mounted () {
+            this.loadBlogList();
+        },
   methods: {
-    setActiveBlog(event) {
-      this.activeBlog=event
-    }
+    loadBlogList() {
+                const myInit = { method: 'GET',
+               mode: 'cors',
+               cache: 'default' };
+                const fpath = `${process.env.VUE_APP_ENV_S3server}/bloglist.json`
+                fetch(fpath,myInit)
+                .then((response)=>{
+                    return response.text()
+                    }
+                )
+                .then(response=>{
+                    this.bloglist=JSON.parse(response)
+                })
+                .catch((err)=>{console.log(err)})
+            }
   },
 };
 </script>

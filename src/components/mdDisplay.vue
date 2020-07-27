@@ -1,5 +1,6 @@
 <template>
     <v-container >
+        {{}}
         <div v-html="markdown"></div>
     </v-container>
 </template>
