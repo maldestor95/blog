@@ -38,23 +38,30 @@
     </v-app-bar>
 
     <v-main>
-      <md-display/>
+      <blog-list @changeBlog="setActiveBlog($event)"/>
+      <md-display :blog="activeBlog"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import mdDisplay from './components/mdDisplay'
+import blogList from './components/bloglist'
 
 export default {
   name: 'App',
 
   components: {
-    mdDisplay
+    mdDisplay, blogList
   },
 
   data: () => ({
-    //
+    activeBlog:"initial"
   }),
+  methods: {
+    setActiveBlog(event) {
+      this.activeBlog=event
+    }
+  },
 };
 </script>
