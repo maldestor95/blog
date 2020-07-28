@@ -1,6 +1,6 @@
 <template>
     <v-container >
-        {{}}
+        <h1>{{header}}</h1>
         <div v-html="markdown"></div>
     </v-container>
 </template>
@@ -13,6 +13,10 @@ import marked from 'marked'
                 type: String,
                 default: "none"
             },
+            header: {
+                type: String,
+                default:'title of the post'
+            }
         },
         data() {
             return {

@@ -7,7 +7,7 @@
         <div  class="firstLines">
             <div v-html="firstLines" />
         </div>
-        <p class="continueReading teal accent-2 teal--text text--darken-4 ">Continue reading </p>
+        <p class="continueReading primary white--text">Continue reading </p>
     </v-card>
 </template>
 
@@ -47,7 +47,7 @@ import marked from "marked"
                     return response.text()
                     }
                 ).then(response=>{
-                    console.log(response)
+                    // console.log(response)
                     _this.firstLines=marked(response)
                     return response
                 })
@@ -76,8 +76,9 @@ import marked from "marked"
 }
 .continueReading {
     position: absolute;
-    padding-top: 5px;
-    bottom:-20px;
+    padding: 5px 0px 5px 0px;
+    font-size: small;
+    bottom:-17px;
     width: 100%;
     text-align: center;
 }
