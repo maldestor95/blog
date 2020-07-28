@@ -6,35 +6,12 @@
       dark
     >
       <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+        <v-img src='./assets/LD2.png' class="logo" />
       </div>
 
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-text-field v-model="searchPost"></v-text-field>
+      <v-icon>mdi-magnify</v-icon>
     </v-app-bar>
 
     <v-main>
@@ -45,9 +22,23 @@
           <preview-article :blog="blog" v-model="activeBlog"></preview-article>
         </v-col>
       </v-row>
-      <md-display :blog="activeBlog"/>
+      <!-- <div v-if="activeBlog!=''"> -->
+        <div>
+        <md-display  :blog="activeBlog" :header="blogTitle(activeBlog)"/>
+      </div>
       </v-container>
     </v-main>
+
+    <v-footer class="primary white--text">
+      <a href="http://ludovicdeparis.fr"><v-icon class="white--text">mdi-web</v-icon></a>
+      <a href="https://www.linkedin.com/in/ldeparis/"><v-icon class="white--text">mdi-linkedin</v-icon></a>
+
+      <v-spacer></v-spacer>
+      <v-icon class="white--text">mdi-copyright</v-icon> 
+      {{new Date().getFullYear()}}
+      <v-spacer></v-spacer>
+      L.Deparis
+    </v-footer>
   </v-app>
 </template>
 
@@ -66,8 +57,9 @@ export default {
   },
 
   data: () => ({
-    activeBlog:"initial",
-    bloglist:[]
+    activeBlog:"",
+    bloglist:[],
+    searchPost:""
   }),
   mounted () {
             this.loadBlogList();
@@ -87,7 +79,18 @@ export default {
                     this.bloglist=JSON.parse(response)
                 })
                 .catch((err)=>{console.log(err)})
-            }
+            },
+    blogTitle(link){
+      const blogInfo= this.bloglist.filter(blog=>blog.link==link)
+      return blogInfo.length==0?"":blogInfo[0].titre
+    }
   },
 };
 </script>
+<style scoped>
+a { text-decoration: none; }
+.logo {
+  max-width: 50px;
+  height:auto;
+}
+</style>

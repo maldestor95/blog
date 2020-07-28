@@ -16,7 +16,7 @@ Creating a post on this blog is quite straightforward !
 
 * Link to picture doesn't work for relative path such as `![1stpic](vue.png)`
 
-![1stpic](vue.png)
+![1stpic](./vue.png)
 
 you need to specify the full path to the ressource 
 
