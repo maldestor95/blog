@@ -13,16 +13,13 @@
       <v-text-field v-model="searchPost"></v-text-field>
       <v-icon>mdi-magnify</v-icon>
     </v-app-bar>
-
     <v-main>
-      <!-- <list-blogs :bloglist="bloglist" v-model="activeBlog"/> -->
       <v-container >
       <v-row>
-        <v-col v-for="blog in bloglist" :key="blog.id">
+        <v-col v-for="blog in filteredBlogList" :key="blog.id">
           <preview-article :blog="blog" v-model="activeBlog"></preview-article>
         </v-col>
       </v-row>
-      <!-- <div v-if="activeBlog!=''"> -->
         <div>
         <md-display  :blog="activeBlog" :header="blogTitle(activeBlog)"/>
       </div>
@@ -44,7 +41,6 @@
 
 <script>
 import mdDisplay from './components/mdDisplay'
-// import listBlogs from './components/bloglist'
 import previewArticle from './components/previewArticle'
 
 export default {
@@ -52,8 +48,7 @@ export default {
 
   components: {
     mdDisplay, 
-    // listBlogs,
-     previewArticle
+    previewArticle
   },
 
   data: () => ({
@@ -83,6 +78,16 @@ export default {
     blogTitle(link){
       const blogInfo= this.bloglist.filter(blog=>blog.link==link)
       return blogInfo.length==0?"":blogInfo[0].titre
+    }
+  },
+  computed: {
+    filteredBlogList() {
+      const filterWord=this.searchPost.split(' ')
+      const titleList=this.bloglist.filter(blog=>{
+          const isWordPresent = (currentWord)=> blog.titre.toUpperCase().includes(currentWord.toUpperCase())
+          return filterWord.every(isWordPresent)
+      })
+      return titleList
     }
   },
 };
