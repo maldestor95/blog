@@ -6,55 +6,96 @@
       dark
     >
       <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+        <v-img src='./assets/LD2.png' class="logo" />
       </div>
 
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-text-field v-model="searchPost"></v-text-field>
+      <v-icon>mdi-magnify</v-icon>
     </v-app-bar>
-
     <v-main>
-      <md-display/>
+      <v-container >
+      <v-row>
+        <v-col v-for="blog in filteredBlogList" :key="blog.id">
+          <preview-article :blog="blog" v-model="activeBlog"></preview-article>
+        </v-col>
+      </v-row>
+        <div>
+        <md-display  :blog="activeBlog" :header="blogTitle(activeBlog)"/>
+      </div>
+      </v-container>
     </v-main>
+
+    <v-footer class="primary white--text">
+      <a href="http://ludovicdeparis.fr"><v-icon class="white--text">mdi-web</v-icon></a>
+      <a href="https://www.linkedin.com/in/ldeparis/"><v-icon class="white--text">mdi-linkedin</v-icon></a>
+
+      <v-spacer></v-spacer>
+      <v-icon class="white--text">mdi-copyright</v-icon> 
+      {{new Date().getFullYear()}}
+      <v-spacer></v-spacer>
+      L.Deparis
+    </v-footer>
   </v-app>
 </template>
 
 <script>
 import mdDisplay from './components/mdDisplay'
+import previewArticle from './components/previewArticle'
 
 export default {
   name: 'App',
 
   components: {
-    mdDisplay
+    mdDisplay, 
+    previewArticle
   },
 
   data: () => ({
-    //
+    activeBlog:"",
+    bloglist:[],
+    searchPost:""
   }),
+  mounted () {
+            this.loadBlogList();
+        },
+  methods: {
+    loadBlogList() {
+                const myInit = { method: 'GET',
+               mode: 'cors',
+               cache: 'default' };
+                const fpath = `${process.env.VUE_APP_ENV_S3server}/bloglist.json`
+                fetch(fpath,myInit)
+                .then((response)=>{
+                    return response.text()
+                    }
+                )
+                .then(response=>{
+                    this.bloglist=JSON.parse(response)
+                })
+                .catch((err)=>{console.log(err)})
+            },
+    blogTitle(link){
+      const blogInfo= this.bloglist.filter(blog=>blog.link==link)
+      return blogInfo.length==0?"":blogInfo[0].titre
+    }
+  },
+  computed: {
+    filteredBlogList() {
+      const filterWord=this.searchPost.split(' ')
+      const titleList=this.bloglist.filter(blog=>{
+          const isWordPresent = (currentWord)=> blog.titre.toUpperCase().includes(currentWord.toUpperCase())
+          return filterWord.every(isWordPresent)
+      })
+      return titleList
+    }
+  },
 };
 </script>
+<style scoped>
+a { text-decoration: none; }
+.logo {
+  max-width: 50px;
+  height:auto;
+}
+</style>

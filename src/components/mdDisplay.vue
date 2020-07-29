@@ -1,35 +1,45 @@
 <template>
-    <div>
-<h1>fetch Doc</h1>
-<v-btn color="info" @click="getMd('1st.md')">fetch</v-btn>
-<div v-html="markdown"></div>
-
-    </div>
+    <v-container >
+        <h1>{{header}}</h1>
+        <div v-html="markdown"></div>
+    </v-container>
 </template>
 
 <script>
 import marked from 'marked'
     export default {
+        props: {
+            blog: {
+                type: String,
+                default: "none"
+            },
+            header: {
+                type: String,
+                default:'title of the post'
+            }
+        },
         data() {
             return {
-                markdown: "markdown data"
+                markdown: ""
+            }
+        },
+        watch: {
+            blog(newValue) {
+                this.getMd(newValue)
             }
         },
         methods: {
             getMd(filePath) {
-                console.log(process.env)
                 const myInit = { method: 'GET',
                mode: 'cors',
                cache: 'default' };
                 const fpath = `${process.env.VUE_APP_ENV_S3server}/${filePath}`
-                console.log(`fpath: ${fpath}`)
                 fetch(fpath,myInit)
                 .then((response)=>{
                     return response.text()
                     }
                 )
                 .then(response=>{
-                    console.log(response)
                     this.markdown=marked(response)
                 })
                 .catch((err)=>{this.markdown=err})
