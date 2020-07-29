@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 2223",
-    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "devserver": "serve src/md -l 2222 --cors"
+    "devserver": "serve src/md -l 2222 --cors",
+    "build": "vue-cli-service build",
+    "testbuild": "serve dist"
   },
   "dependencies": {
     "core-js": "^3.6.5",
@@ -27,7 +28,8 @@
     "serve": "^11.3.2",
     "vue-cli-plugin-vuetify": "^2.0.7",
     "vue-template-compiler": "^2.6.11",
-    "vuetify-loader": "^1.3.0"
+    "vuetify-loader": "^1.3.0",
+    "webpack-bundle-analyzer": "^3.8.0"
   },
   "eslintConfig": {
     "root": true,
