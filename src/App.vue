@@ -6,9 +6,14 @@
       </div>
 
       <v-spacer></v-spacer>
-      {{numberOfFilteredBlogs}}
-      /
-      {{numberOfBlogs}}
+      <v-icon @click="changeSortBlogOrder()">
+        {{sortBlogOrder?'mdi-sort-calendar-ascending':'mdi-sort-calendar-descending'}}
+      </v-icon>
+      <v-chip class="primary darken-1">
+        {{numberOfFilteredBlogs}}
+        /
+        {{numberOfBlogs}}
+      </v-chip>
       <v-text-field v-model="searchPost"></v-text-field>
       <v-icon>mdi-magnify</v-icon>
     </v-app-bar>
@@ -57,7 +62,8 @@
     data: () => ({
       activeBlog: "",
       bloglist: [],
-      searchPost: ""
+      searchPost: "",
+      sortBlogOrder:true
     }),
     mounted() {
       this.loadBlogList();
@@ -96,6 +102,10 @@
         } catch (error) {
           console.log(`Error; a date in the blog might not be in the right format ${error}`)
         }
+      },
+      changeSortBlogOrder(){
+        this.sortBlogOrder = !this.sortBlogOrder; 
+        this.sortBlogListByDate(this.sortBlogOrder)
       },
       blogTitle(link) {
         const blogInfo = this.bloglist.filter(blog => blog.link == link)
