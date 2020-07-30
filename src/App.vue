@@ -1,5 +1,6 @@
 <template>
   <v-app>
+
     <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
         <v-img src='./assets/LD2.png' class="logo" />
@@ -14,19 +15,39 @@
         /
         {{numberOfBlogs}}
       </v-chip>
-      <v-text-field v-model="searchPost"></v-text-field>
+      <v-text-field v-model="searchPost" clearable></v-text-field>
       <v-icon>mdi-magnify</v-icon>
     </v-app-bar>
+
     <v-main>
-      <v-container>
-        <v-row>
+      <v-container fluid>
+        <!-- <p> displayblog{{displayblog}} </p>
+        <p>displayPreview{{displayPreview}} </p>
+        <p>**{{JSON.stringify(searchPost)}}**</p> -->
+        <v-row v-if="displayPreview">
           <v-col v-for="blog in filteredBlogList" :key="blog.id">
-            <preview-article :blog="blog" v-model="activeBlog"></preview-article>
+            <preview-article :blog="blog" v-model="activeBlog" @blogChosen="displayPreview=false" @change="searchPost=null"></preview-article>
           </v-col>
         </v-row>
-        <div>
-          <md-display :blog="activeBlog" :header="blogTitle(activeBlog)" />
-        </div>
+        <!-- <div class="line"/> -->
+        <v-row >
+          <v-col v-if="!displayPreview" cols="3">
+            <v-list dense flat >
+              <!-- <v-list-item-group v-model="listItem"> -->
+              <v-list-item v-for="blog in bloglist" :key="blog.id" @click="showBlog(blog.link)" class="vlist " :class="{selected : isCurrentBlog(blog.link)}" >
+                <v-list-item-content>
+                  <v-list-item-title v-text="blog.titre"></v-list-item-title>
+                  <v-list-item-subtitle v-text="blog.date"></v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <!-- </v-list-item-group> -->
+            </v-list>
+          </v-col>
+          <v-col >
+            <md-display :blog="activeBlog" :header="blogTitle(activeBlog)" />
+            {{activeBlog}}
+          </v-col >
+        </v-row>
       </v-container>
     </v-main>
 
@@ -62,13 +83,25 @@
     data: () => ({
       activeBlog: "",
       bloglist: [],
-      searchPost: "",
-      sortBlogOrder:true
+      searchPost: null,
+      sortBlogOrder:true,
+      displayblog: false,
+      displayPreview:true,
+      listItem:1,
     }),
     mounted() {
       this.loadBlogList();
     },
+    watch: {
+      searchPost(newValue) {
+        // this.displayblog=newValue!=null ? false : true
+        this.displayPreview = newValue!=(null|'') ?  true : false
+      }
+    },
     methods: {
+      showBlog(changeBlog){
+        this.activeBlog=changeBlog
+      },
       loadBlogList() {
         const myInit = {
           method: 'GET',
@@ -110,11 +143,17 @@
       blogTitle(link) {
         const blogInfo = this.bloglist.filter(blog => blog.link == link)
         return blogInfo.length == 0 ? "" : blogInfo[0].titre
+      },
+      isCurrentBlog(blogLink){
+        console.log(blogLink,this.activeBlog)
+        return blogLink==this.activeBlog
       }
     },
     computed: {
       filteredBlogList() {
-        const filterWord = this.searchPost.split(' ')
+        if (this.searchPost==null){return this.bloglist}
+
+        const filterWord = this.searchPost.split(' ') 
         const titleList = this.bloglist.filter(blog => {
           const isWordPresent = (currentWord) => blog.titre.toUpperCase().includes(currentWord.toUpperCase())
           return filterWord.every(isWordPresent)
@@ -138,5 +177,17 @@
   .logo {
     max-width: 50px;
     height: auto;
+  }
+  .line {
+    border: green solid 1px;
+  }
+  .vlist:hover {
+    background-color: var(--v-primary-lighten2);
+    border-radius: 20px;
+  }
+  .selected {
+    background-color: var(--v-primary-lighten3);
+    color: red !important;
+    border-radius: 20px;
   }
 </style>
