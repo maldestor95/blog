@@ -1,5 +1,5 @@
 <template>
-    <v-card min-width="300px" max-height="200px" class="card" @click.prevent="$emit('input',blog.link)">
+    <v-card min-width="300px" max-height="200px" class="card" @click="$emit('input',blog.link);$emit('blogChosen')">
         <v-card-title >
             {{blog.titre}}
         </v-card-title>
